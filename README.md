@@ -25,3 +25,34 @@ Here are the OOPS concepts that you need to know before starting on Design Patte
 - Polymorphism
 - Coupling
 - Composition
+
+---
+
+  ### Encapsulation
+
+- Encapsulation is a fundamental principle of object-oriented programming. It involves bundling the data ("fields" or "properties") and the behaviours (or methods) that operate on that data into a single unit, called a class.
+- The primary goal of encapsulation is to hide the internal implementation details of a class by only exposing the necessary functionalities to the outside world. This means the object's internal state is hidden and can only be changed via operations. The procedures (methods/operations) are the only way to access and modify an object's representation.
+- A common way to achieve encapsulation is by marking the data members as private. This prevents direct access to the data from outside the class. Instead, controlled access is provided through public "Getter" methods to retrieve the data and methods to manipulate it, ensuring that operations are performed safely and according to defined rules and logic.
+
+Here is a bad example that does not follow Encapsulation :
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/376565cb5204612d0dbe01d5d14a2ddc7b74083a/force-app/main/default/classes/OOPS/Encapsulation/AccountScoreService_Bad.cls#L1-L27
+
+Users of this class have direct access to the internal fields/properties and methods/logic of the `AccountScoreService_Bad` class. For example, users can directly assign the `Map<Id, Decimal> opportunityScore` and `Map<Id, Decimal> activityScore` since they are `public`. Also, The Users of this class are required to call the public methods to calculate the score:
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/376565cb5204612d0dbe01d5d14a2ddc7b74083a/scripts/apex/OOPS/Encapsulation/EncapsulationBadExample.apex#L1-L12
+
+A better way to define the class which follows the Encapsulation principle and hides the fields and internal logic:
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/376565cb5204612d0dbe01d5d14a2ddc7b74083a/force-app/main/default/classes/OOPS/Encapsulation/AccountScoreService_Good.cls#L1-L51
+
+We can call this class as follows :
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/376565cb5204612d0dbe01d5d14a2ddc7b74083a/scripts/apex/OOPS/Encapsulation/EncapsulationGoodExample.apex#L1-L8
+
+In the above example :
+- The `AccountScoreService_Good` class encapsulated the scoring data (`Map<Id, Decimal> opportunityScore` and `Map<Id, Decimal> activityScore`) and methods working on this data (`calculateScore()`) into a single unit which are `private`, encapsulating them within the class preventing direct access from the outside of the class by the user of this class.
+- The **"Getter"** methods (`getOpportunityScore(Id accountId)` and `getActivityScore(Id accountId)`) are used to provide controlled access to the data according to the logic defined.
+- `private` methods like `calculateScore(), calculateOpportunityScore(), calculateActivityScore()` are used internally by the class to handle the business logic, which the user of the class doesn't need to worry about.
+
+In summary, Encapsulation is used to separate the public interface and the internal implementation/business logic of the class, allowing users to focus on the higher-level functionality.
