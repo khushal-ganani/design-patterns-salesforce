@@ -42,7 +42,7 @@ Users of this class have direct access to the internal fields/properties and met
 
 https://github.com/khushal-ganani/design-patterns-salesforce/blob/376565cb5204612d0dbe01d5d14a2ddc7b74083a/scripts/apex/OOPS/Encapsulation/EncapsulationBadExample.apex#L1-L12
 
-A better way to define the class which follows the Encapsulation principle and hides the fields and internal logic:
+A better way to define the class that follows the Encapsulation principle and hides the fields and internal logic:
 
 https://github.com/khushal-ganani/design-patterns-salesforce/blob/376565cb5204612d0dbe01d5d14a2ddc7b74083a/force-app/main/default/classes/OOPS/Encapsulation/AccountScoreService_Good.cls#L1-L51
 
@@ -56,3 +56,77 @@ In the above example :
 - `private` methods like `calculateScore(), calculateOpportunityScore(), calculateActivityScore()` are used internally by the class to handle the business logic, which the user of the class doesn't need to worry about.
 
 In summary, Encapsulation is used to separate the public interface and the internal implementation/business logic of the class, allowing users to focus on the higher-level functionality.
+
+### Abstraction
+
+- Abstraction is the process of hiding the complex internal implementation details of a class or methods and exposing only the necessary features.
+- For example, when pressing a button on a TV remote, we don't have to worry about or interact directly with the internal circuit board – those details are abstracted away.
+
+In Apex, we achieve abstraction using:
+- Abstract classes
+- Interfaces
+- Sometimes, base classes with virtual methods
+
+**✅ Scenario: Sending Notifications in Different Ways**
+
+Imagine you're building a system where:
+- A Contact may need to be notified by Email or SMS, based on user preference.
+
+You want to create a flexible and extendable design where:
+- The core logic knows only how to trigger notifications, not how each type works.
+- You can add more notification types (like WhatsApp or Push) in the future without changing core logic.
+
+Here is a bad example that does not follow Abstraction :
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/f6533b429f9e4f58583e0c0e1b589a84874ad3e9/force-app/main/default/classes/OOPS/Abstraction/ContactNotificationService_Bad.cls#L1-L20
+
+**🚨 What's Wrong with This?**
+
+| Problem | Why It's a Violation of Abstraction |
+| -------- | -------- |
+No interface or base class | There’s no abstraction layer. The service class directly controls how email or SMS is sent.
+Tightly coupled logic |	The service class knows about every notification method and how to implement them.
+Hard to extend |	Adding WhatsApp or Push notifications means adding more else if blocks and more code changes to the same class.
+Hard to test |	You can't mock or isolate the notification behaviour; it's all baked into one method.
+Violates Single Responsibility Principle (SRP) |	This class is doing too much — both determining **what and how to notify**.
+
+Here is a better way to define this logic using Abstraction :
+
+**Create an Interface (Abstraction)**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/f6533b429f9e4f58583e0c0e1b589a84874ad3e9/force-app/main/default/classes/OOPS/Abstraction/NotificationStrategy.cls#L1-L3
+
+This interface provides a contract:
+- Any class implementing this interface must define how to `sendNotification()`.
+
+**Concrete Implementations (Hidden Complexity)**
+
+Email Notification:
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/f6533b429f9e4f58583e0c0e1b589a84874ad3e9/force-app/main/default/classes/OOPS/Abstraction/EmailNotification.cls#L1-L9
+
+SMS Notification (Dummy Example):
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/f6533b429f9e4f58583e0c0e1b589a84874ad3e9/force-app/main/default/classes/OOPS/Abstraction/SMSNotification.cls#L1-L6
+
+**Notification Service (Abstracts the Logic)**
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/f6533b429f9e4f58583e0c0e1b589a84874ad3e9/force-app/main/default/classes/OOPS/Abstraction/ContactNotificationService_Good.cls#L1-L14
+
+**How to Use It in Apex**
+
+Let’s say you want to notify a contact by email:
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/f6533b429f9e4f58583e0c0e1b589a84874ad3e9/scripts/apex/OOPS/Abstraction/AbstractionGoodExample.apex#L1-L5
+
+**🧠 What Makes This Abstraction?**
+
+| Element |	Role in Abstraction |
+| ------- | ------------------- |
+| `NotificationStrategy` interface |	Abstracts what a notification is, so that the classes using this interface don't have to know the concrete implementation for this interface |
+| `EmailNotification`, `SMSNotification` | Hides how the notification is sent into concrete implementation classes which implement the `NotificationStrategy` interface |
+| `ContactNotificationService_Good` |	Uses the abstracted interface, not concrete logic. This way, `ContactNotificationService_Good` doesn't have to know about the exact logic for sending, let us say, Email or SMS notifications. It just has to know how to send a notification, which is by just calling the `sendNotification()` method on the `NotificationStrategy` interface |
+
+**🔥 Advantages of Using Abstraction:**
+
+- ✅ **Loose coupling**: Core logic doesn't depend on specific implementations, hence changing the concrete `EmailNotification`, `SMSNotification` classes won't break the `ContactNotificationService_Good` service class.
+- ✅ **Easy extension** Add new types (e.g., `WhatsAppNotification`) without breaking existing code.
+- ✅ **Testable and maintainable**: Each piece has a clear responsibility and can be tested individually.
+
