@@ -130,3 +130,50 @@ https://github.com/khushal-ganani/design-patterns-salesforce/blob/f6533b429f9e4f
 - ✅ **Easy extension** Add new types (e.g., `WhatsAppNotification`) without breaking existing code.
 - ✅ **Testable and maintainable**: Each piece has a clear responsibility and can be tested individually.
 
+### Inheritance
+
+- **Inheritance** is the mechanism in object-oriented programming where one class (called a **child** or **subclass**) can **inherit the properties and methods** of another class (called a **parent** or **superclass**).
+- Subclasses inherit properties and behaviours from its superclasses and can also add new features or override existing ones.
+- Inheritance is described as a **"is-a"** relationship. For example, **A Car "is-a" Vehicle** and a **Bike "is-a" Vehicle**. So Vehicle can be a Super-class while Care and Bike can be child sub-classes.
+
+**✅ Salesforce Apex Example: Custom Validation Rules via Inheritance**
+
+**🧠 Scenario:**
+
+You need to build a validation framework for different objects, like:
+- **Contact**: Must have a Name and Email.
+- **Opportunity**: Must have a Name, Amount and Close Date.
+
+Instead of writing logic separately or duplicating code, you want a reusable, extensible structure that uses inheritance.
+
+**🎯 Goal:**
+
+- Create a base class `RecordValidator`
+- Each object gets its own validator by inheriting the base class
+- All validators implement their own custom logic
+
+**Step 1: Base Class**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/62a74e1178606bd9fa8ad0a54d54561d7b8c0bff/force-app/main/default/classes/OOPS/Inheritance/RecordValidator.cls#L1-L21
+
+**Step 2: Create Child Classes**
+
+Contact Validator:
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/62a74e1178606bd9fa8ad0a54d54561d7b8c0bff/force-app/main/default/classes/OOPS/Inheritance/ContactValidator.cls#L1-L12
+
+Opportunity Validator:
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/62a74e1178606bd9fa8ad0a54d54561d7b8c0bff/force-app/main/default/classes/OOPS/Inheritance/OpportunityValidator.cls#L1-L15
+
+**Sample Execution (Anonymous Apex):**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/62a74e1178606bd9fa8ad0a54d54561d7b8c0bff/scripts/apex/OOPS/Inheritance/InheritanceGoodExample.apex#L1-L4
+
+**✅ Benefits of Using Inheritance Here**
+
+- Defines a common method `validate()` in the base `RecordValidator` class, which is overridden by the sub-classes to define the individual validation logic for each object.
+- `ContactValidator`, `OpportunityValidator` child classes	customise validation for each object, extending the functionality of the `RecordValidator` class.
+- Reusable and easily extendible for other objects like Lead, Case, etc.
+- Each class has a clean separation of the logic to have only a single responsibility.
+- Each validator is easy to unit test independently
