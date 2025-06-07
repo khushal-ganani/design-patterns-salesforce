@@ -260,3 +260,28 @@ Although `notifyUser` uses the interface type (`NotificationSender`), Apex autom
 | Encapsulation	| Each (`EmailNotificationSender ChatterNotificationSender`) class hides how it sends the message |
 | Abstraction	| The Caller doesn't need to know how the notification is implemented, it just has to call the `sendNotification` on the `NotificationSender` interface |
 | Inheritance (optional) | Not used here, but could be if using abstract classes |
+
+---
+
+### Coupling
+
+- Coupling refers to the **degree of direct knowledge or dependency one class or module has about another**. It tells us **how tightly connected different pieces of code are**.
+- High coupling means that classes are tightly interconnected, making it difficult to modify or maintain them independently. Low coupling, on the other hand, indicates loose connections between classes, allowing for greater flexibility and ease of modification.
+
+**Why Is Coupling Important?**
+
+- Low (loose) coupling makes your code more flexible, reusable, and testable.
+- High (tight) coupling leads to rigid, harder-to-maintain, and error-prone code.
+
+**High Coupling**
+
+- Suppose when a **class creates an object of another class or directly calls a static method from another class**, it makes the two classes **tightly coupled** and any changes to one class may require modifications to the other class.
+
+**Low Coupling**
+
+- To reduce coupling, we can introduce an **abstraction (e.g., an interface)** between the two classes. This allows the class to interact with the other class through the abstraction, making it easier to replace or modify the implementation of abstract class or interface without affecting the other class.
+- This decouples the classes from the specific implementation of the other class making the codebase more **maintainable, flexible and can be modified independently without breaking the codebase**.
+
+**Example:***
+- The above example mentioned in the [Polymorphism](https://github.com/khushal-ganani/design-patterns-salesforce/blob/main/README.md#polymorphism) section can also be considered as a great example of loose and tight coupling where the logic related to different notification types is tightly coupled with the same `NotificationService_Bad` class which handles the sending notification logic.
+- But the `NotificationService_Good` class which has the logic to send notification is loosely coupled with the logic related to each different types of notification using an abstraction by using the `NotificaionSender` interface.
