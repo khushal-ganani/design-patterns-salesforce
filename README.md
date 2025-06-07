@@ -57,6 +57,8 @@ In the above example :
 
 In summary, Encapsulation is used to separate the public interface and the internal implementation/business logic of the class, allowing users to focus on the higher-level functionality.
 
+---
+
 ### Abstraction
 
 - Abstraction is the process of hiding the complex internal implementation details of a class or methods and exposing only the necessary features.
@@ -130,6 +132,8 @@ https://github.com/khushal-ganani/design-patterns-salesforce/blob/f6533b429f9e4f
 - ✅ **Easy extension** Add new types (e.g., `WhatsAppNotification`) without breaking existing code.
 - ✅ **Testable and maintainable**: Each piece has a clear responsibility and can be tested individually.
 
+---
+
 ### Inheritance
 
 - **Inheritance** is the mechanism in object-oriented programming where one class (called a **child** or **subclass**) can **inherit the properties and methods** of another class (called a **parent** or **superclass**).
@@ -177,3 +181,82 @@ https://github.com/khushal-ganani/design-patterns-salesforce/blob/62a74e1178606b
 - Reusable and easily extendible for other objects like Lead, Case, etc.
 - Each class has a clean separation of the logic to have only a single responsibility.
 - Each validator is easy to unit test independently
+
+---
+
+### Polymorphism
+
+- **Polymorphism** is a core concept in Object-Oriented Programming (OOP), which is the ability of an object to take many forms.
+- It allows **different classes to be treated as instances of a common parent class or interface**, and the **appropriate method implementation is called at runtime**.
+
+**In Apex, polymorphism is used when:**
+
+- You define a **parent abstract class (or interface)**
+- You write **methods that use the parent type**
+- At runtime, **child class methods are executed** depending on the actual object type
+
+**✅ Real-World Salesforce Use Case: Notification Sender**
+
+**🧩 Requirement:**
+You need to send different types of notifications to users:
+- Email notification
+- Chatter post notification
+
+You want a clean, scalable way to handle all these using a single reference — that's where polymorphism shines.
+
+First, let us see a bad example which is not following the Polymorphism principle:
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/14edffc0849962a95544da9ffdfceeefd15c5208/force-app/main/default/classes/OOPS/Polymorphism/NotificationService_Bad.cls#L1-L19
+
+The above class can be used as follows:
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/14edffc0849962a95544da9ffdfceeefd15c5208/scripts/apex/OOPS/Polymorphism/PolymorphismBadExample.apex#L1-L5
+
+**🚨 Why This Is Bad**
+| Problem |	Description |
+| ------- | ----------- |
+| ❌ No Polymorphism	| Each type is handled with `if-else` instead of letting objects decide behaviour, which violates the Open/Closed Principle (a SOLID Principle) and Polymorphism. | 
+| ❌ Not Open/Closed	| If you want to add "Slack Notification", you'll need to edit the core `notifyUser` method — risky and error-prone since we are making changes on the same class/code. | 
+| ❌ Tight Coupling	| `NotificationService_Bad` depends on all specific implementations in a single class in `if-else` conditions instead of delegating to different objects with implementation. | 
+| ❌ Hard to Test	| No separation of concerns. You can't easily mock or isolate each type of notification. | 
+| ❌ Poor Reusability	| Can't pass the logic around as objects — violates OOP design. |
+
+Now let's see a good example which follows the Polymorphism Principle:
+
+**✅ Step 1: Define an Interface**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/14edffc0849962a95544da9ffdfceeefd15c5208/force-app/main/default/classes/OOPS/Polymorphism/NotificationSender.cls#L1-L3
+
+**✅ Step 2: Implement Different Notification Classes**
+
+**📧 Email Notification:**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/14edffc0849962a95544da9ffdfceeefd15c5208/force-app/main/default/classes/OOPS/Polymorphism/EmailNotificationSender.cls#L1-L6
+
+**💬 Chatter Notification:**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/14edffc0849962a95544da9ffdfceeefd15c5208/force-app/main/default/classes/OOPS/Polymorphism/ChatterNotificationSender.cls#L1-L6
+
+**✅ Step 3: Use Polymorphism**
+
+**You can write a single method that works with the interface:**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/14edffc0849962a95544da9ffdfceeefd15c5208/force-app/main/default/classes/OOPS/Polymorphism/NotificationService_Good.cls#L1-L11
+
+The above class can be used as follows:
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/14edffc0849962a95544da9ffdfceeefd15c5208/scripts/apex/OOPS/Polymorphism/PolymorphismExampleGood.apex#L1-L6
+
+**⚙️ What's Happening Here?**
+
+Although `notifyUser` uses the interface type (`NotificationSender`), Apex automatically calls the correct `sendNotification()` method based on the actual concrete class object passed (`EmailNotificationSender ChatterNotificationSender`).
+
+**🔍 Summary of OOP Concepts Applied**
+
+| OOP Principle	| How It’s Used |
+| ------------- | ------------- |
+| Polymorphism	| One method call (`sendNotification`) behaves differently for each object type passed (`EmailNotificationSender ChatterNotificationSender`) |
+| Interface	| Declares a common contract (`NotificationSender`), and concrete classes adhering to this contract have to define the `sendNotification` method |
+| Encapsulation	| Each (`EmailNotificationSender ChatterNotificationSender`) class hides how it sends the message |
+| Abstraction	| The Caller doesn't need to know how the notification is implemented, it just has to call the `sendNotification` on the `NotificationSender` interface |
+| Inheritance (optional) | Not used here, but could be if using abstract classes |
