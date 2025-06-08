@@ -285,3 +285,111 @@ Although `notifyUser` uses the interface type (`NotificationSender`), Apex autom
 **Example:**
 - The above example mentioned in the [Polymorphism](https://github.com/khushal-ganani/design-patterns-salesforce/blob/main/README.md#polymorphism) section can also be considered as a great example of loose and tight coupling, where the logic related to different notification types is tightly coupled with the same `NotificationService_Bad` class, which handles the sending notification logic.
 - But the `NotificationService_Good` class, which has the logic to send notifications, is loosely coupled with the logic related to each different type of notification using an abstraction by using the `NotificationSender` interface.
+
+### Composition
+
+- Composition is an OOP design principle where a **class contains instances of other classes to reuse their behaviour and functionality** instead of **inheriting** from them.
+- In composition, objects are assembled to form larger structures, with **each component object maintaining its own state and behaviour**.
+- Composition is often described in terms of a **"has-a" relationship**.
+- For example, let us consider a `Car` class (object) which has various components such as `Engine`, `Wheels`, which are separate classes responsible for their own functionality. The `Car` object is composed of these components and delegates the tasks to them for their functionality.
+
+**✅ Real-Life Salesforce Scenario for Composition**
+
+**🧩 Use Case: Account Creation with Multiple Post-Processing Steps**
+
+You're asked to build an Account creation service in Apex that performs several tasks after an Account is inserted:
+1. Sends a welcome email to the primary contact.
+2. Logs the action in a custom object (AccountLog__c).
+
+**🎯 Goal: Compose Behaviour Using Small, Independent Classes**
+
+**🔶 Step 1: Define an Interface for Post-Creation Actions**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/1368e5c12875e77b8148cbaad246c960bace1a28/force-app/main/default/classes/OOPS/Composition/GoodExample_Composition/AccountCreationAction.cls#L1-L3
+
+**🔷 Step 2: Implement Different Post-Action Behaviours**
+
+**🔹 Send Welcome Email**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/1368e5c12875e77b8148cbaad246c960bace1a28/force-app/main/default/classes/OOPS/Composition/GoodExample_Composition/SendWelcomeEmailAction.cls#L1-L8
+
+**🔹 Log to AccountLog__c**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/1368e5c12875e77b8148cbaad246c960bace1a28/force-app/main/default/classes/OOPS/Composition/GoodExample_Composition/CreateAccountLogAction.cls#L1-L16
+
+**🔷 Step 3: Compose the Service with These Behaviours**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/1368e5c12875e77b8148cbaad246c960bace1a28/force-app/main/default/classes/OOPS/Composition/GoodExample_Composition/AccountCreationService.cls#L1-L16
+
+Here is how we can use the above solution:
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/1368e5c12875e77b8148cbaad246c960bace1a28/scripts/apex/OOPS/Composition/CompositionGoodExample.apex#L1-L9
+
+**✅ Why This Is a Great Example of Composition**
+
+| Benefit | Explanation |
+| --- | --- |
+| 🔁 **Reusable** | Each action class (email, log, assign) is reusable elsewhere. |
+| ➕ **Extensible** | Want to add another action? Just create a new class and add to the list --- no changes to existing logic. |
+| 🧪 **Testable** | You can unit test each action in isolation or mock them if needed. |
+| 🔧 **Decoupled** | The `AccountCreationService` knows nothing about what actions exist --- it just loops and calls `insertAccounts()` which decouples the `AccountCreationService` from each type of implementation of `AccountCreationAction`. |
+| 📦 **Flexible** | You can dynamically change the list of actions based on config, environment, or user role. |
+
+#### Composition Vs Inheritance
+
+**💥 What if We Used Inheritance Here Instead? (Not Ideal Here)**
+
+- Imagine if `SendWelcomeEmailAction` and `CreateAccountLogAction` inherited from `AccountCreationAction`, you’d end up duplicating logic or violating SRP. That’s where composition wins — you keep formatting separate from generating logic.
+- Also, let's say you want to call only a certain combination of `AccountCreationAction`, then you would have to again create sub-classes for those combinations, which would have allot of code duplication and aslo violating SRP too.
+
+Let's try to develop the above example with Inheritance:
+
+**🔶 Step 1: Define an Interface for Post-Creation Actions**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/1368e5c12875e77b8148cbaad246c960bace1a28/force-app/main/default/classes/OOPS/Composition/BadExample_Inheritance/AccountCreationAction_Inheritance.cls#L1-L5
+
+**🔷 Step 2: Implement Different Post-Action Behaviours**
+
+**🔹 Send Welcome Email**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/1368e5c12875e77b8148cbaad246c960bace1a28/force-app/main/default/classes/OOPS/Composition/BadExample_Inheritance/SendWelcomeEmailAction_Inheritance.cls#L1-L8
+
+**🔹 Log to AccountLog__c**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/1368e5c12875e77b8148cbaad246c960bace1a28/force-app/main/default/classes/OOPS/Composition/BadExample_Inheritance/CreateAccountLogAction_Inheritance.cls#L1-L15
+
+**🔹 Both Welcome Email and Log to AccountLog__c (Not Ideal)**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/4002fe9ec3aa53b77d051697a76b6c95a530497d/force-app/main/default/classes/OOPS/Composition/BadExample_Inheritance/AllAcountCReationActions_Inheritance.cls#L1-L19
+
+The above example can be used as follows :
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/4002fe9ec3aa53b77d051697a76b6c95a530497d/scripts/apex/OOPS/Composition/BadExampleWithInheritance.apex#L1-L4
+
+**⚠️ The Problem with this**
+
+You want to apply all two behaviors, but Apex does not support multiple inheritance. You cannot extend more than one class at a time.
+
+This means you're forced to create a class like this:
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/4002fe9ec3aa53b77d051697a76b6c95a530497d/force-app/main/default/classes/OOPS/Composition/BadExample_Inheritance/AllAcountCReationActions_Inheritance.cls#L1-L19
+
+**❌ Why This Inheritance-Based Design Is Not Ideal**
+
+| 🚫 Problem | 💡 Explanation |
+| --- | --- |
+| ❌ **No multiple inheritance** | You can't mix `SendWelcomeEmailAction_Inheritance` and `CreateAccountLogAction_Inheritance`, and if you want to do so, you have to create a new sub-class similar to `AllAcountCReationActions_Inheritance`. |
+| ❌ **Poor Separation of Concerns** | Let's say if we consider the `AllAcountCReationActions_Inheritance` class, all logic is now in a single class, having poor separation of concerns. |
+| ❌ **Low Reusability** | Want just logging OR Welcome Email, OR Both? You'll have to duplicate code for each use case. |
+| ❌ **Hard to Extend** | Want to add a new behavior? You have to modify or duplicate classes. |
+| ❌ **Tightly Coupled** | Hard to test one behaviour in isolation since for a combination of actions, all the logic is defined in a single class. |
+
+#### Fragile Base Class Issue in OOP Software
+
+**Fragile Base Class Problem** — is a common design issue caused by Inheritance and can be avoided using Composition. It's a software design issue in Object-Oriented Programming (OOP), which occurs when a **change is made in the base or parent class**, can **cause issues and break the functionality of the derived child classes**. This occurs due to a **tight coupling between the base and derived classes** in Inheritance hierarchies.
+
+**🛡️ How to Avoid the Fragile Base Class Problem**
+
+- **✅ Prefer Composition Over Inheritance** : Composition promotes loose coupling between classes, thus making the codebase more maintainable and scalable.
+- **✅ Keep Base Classes Simple** : Don’t call virtual or abstract methods in constructors or base logic defined in the base class unexpectedly. Also, avoid deep Inheritance hierarchies.
+- **✅ Use Interfaces for Behavior Extension** : This allows behavior injection without inheritance coupling.
