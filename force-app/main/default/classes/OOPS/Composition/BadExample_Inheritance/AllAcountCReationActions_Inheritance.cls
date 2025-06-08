@@ -1,6 +1,6 @@
 public with sharing class AllAcountCReationActions_Inheritance extends AccountCreationAction_Inheritance {
     public override void createAccounts (List<Account> accounts) {
-        super.createAccounts(accountsl);
+        super.createAccounts(accounts);
 
         List<AccountLog__c> accountLogs = new List<AccountLog__c>();
         for (Account acc : accounts) {
@@ -9,6 +9,7 @@ public with sharing class AllAcountCReationActions_Inheritance extends AccountCr
                 Account__c = acc.Id,
                 Action__c = 'Account Created'
             ));
+            System.debug('Account Log created for Account : ' + acc.Name);
         }
 
         insert accountLogs;
