@@ -6,7 +6,7 @@ Design patterns are **proven solutions to recurring problems** in software desig
 
 Learning design patterns is essential for several reasons:
 
-- **Improved Code Quality**: Using design patterns often results in **more maintainable, flexible, and extensible code**. They help promote **loose coupling** and encapsulate design decisions, making codebases easier to understand, modify, and extend. They embody best practices and principles of software design. For Example, most of the Salesforce Apex frameworks that organizations follow are built following these design patterns.
+- **Improved Code Quality**: Using design patterns often results in **more maintainable, flexible, and extensible code**. They help promote **loose coupling** and encapsulate design decisions, making codebases easier to understand, modify, and extend. They embody best practices and principles of software design. For Example, most of the Salesforce Apex frameworks that organisations follow are built following these design patterns.
 - **Enhanced Understanding and Development**: Knowing design patterns makes it easier to **understand existing object-oriented systems**. They can help you become a better designer, enabling novices to act more like experts. They are also useful for transitioning from analysis models to implementation models and can provide targets for refactoring, making designs more robust to change.
 - **Reusable Solutions**: They offer **tested solutions to common design issues**, preventing developers from having to "reinvent the wheel". By applying these patterns, you can reuse successful designs and architectures.
 - **Standardized Terminology**: They **provide a common language for developers**, which enhances collaboration and understanding among team members. This allows you to talk about designs at a higher level of abstraction.
@@ -279,9 +279,9 @@ Although `notifyUser` uses the interface type (`NotificationSender`), Apex autom
 
 **Low Coupling**
 
-- To reduce coupling, we can introduce an **abstraction (e.g., an interface)** between the two classes. This allows the class to interact with the other class through the abstraction, making it easier to replace or modify the implementation of abstract class or interface without affecting the other class.
-- This decouples the classes from the specific implementation of the other class making the codebase more **maintainable, flexible and can be modified independently without breaking the codebase**.
+- To reduce coupling, we can introduce an **abstraction (e.g., an interface)** between the two classes. This allows the class to interact with the other class through the abstraction, making it easier to replace or modify the implementation of the abstract class or interface without affecting the other class.
+- This decouples the classes from the specific implementation of the other class, making the codebase more **maintainable, flexible and can be modified independently without breaking the codebase**.
 
-**Example:***
-- The above example mentioned in the [Polymorphism](https://github.com/khushal-ganani/design-patterns-salesforce/blob/main/README.md#polymorphism) section can also be considered as a great example of loose and tight coupling where the logic related to different notification types is tightly coupled with the same `NotificationService_Bad` class which handles the sending notification logic.
-- But the `NotificationService_Good` class which has the logic to send notification is loosely coupled with the logic related to each different types of notification using an abstraction by using the `NotificaionSender` interface.
+**Example:**
+- The above example mentioned in the [Polymorphism](https://github.com/khushal-ganani/design-patterns-salesforce/blob/main/README.md#polymorphism) section can also be considered as a great example of loose and tight coupling, where the logic related to different notification types is tightly coupled with the same `NotificationService_Bad` class, which handles the sending notification logic.
+- But the `NotificationService_Good` class, which has the logic to send notifications, is loosely coupled with the logic related to each different type of notification using an abstraction by using the `NotificationSender` interface.
