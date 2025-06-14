@@ -393,3 +393,62 @@ https://github.com/khushal-ganani/design-patterns-salesforce/blob/4002fe9ec3aa53
 - **✅ Prefer Composition Over Inheritance** : Composition promotes loose coupling between classes, thus making the codebase more maintainable and scalable.
 - **✅ Keep Base Classes Simple** : Don’t call virtual or abstract methods in constructors or base logic defined in the base class unexpectedly. Also, avoid deep Inheritance hierarchies.
 - **✅ Use Interfaces for Behavior Extension** : This allows behavior injection without inheritance coupling.
+
+## SOLID Principles
+
+**SOLID is an acronym for five design principles** intended to make software systems more **understandable, flexible, and maintainable**. These principles are fundamental in Object-Oriented Programming (OOP) and lay the foundation for good software design.
+
+| Letter | Principle Name | Description |
+| --- | --- | --- |
+| **S** | Single Responsibility Principle (SRP) | A class should have **only one reason to change** |
+| **O** | Open/Closed Principle (OCP) | Software entities should be **open for extension, but closed for modification** |
+| **L** | Liskov Substitution Principle (LSP) | Objects of subclasses should be **substitutable** with objects of their base classes without altering correctness |
+| **I** | Interface Segregation Principle (ISP) | Clients should not be forced to depend on **methods/interfaces they do not use** |
+| **D** | Dependency Inversion Principle (DIP) | Depend on **abstractions**, not on concrete implementations |
+
+🎯 How Do SOLID Principles Relate to Design Patterns?
+-------------------------------------------------------
+
+> Think of **SOLID** principles as the **"rules" or "guiding principles"** of clean object-oriented design.\
+> Think of **Design Patterns** as **"solutions to recurring design problems"**.
+
+If you **understand SOLID**, you'll:
+-   Know **why** a design pattern is structured a certain way,
+-   Avoid misusing patterns (e.g., using inheritance wrongly),
+-   Build your **own reusable designs** effectively.
+
+✅ Why Are They Important?
+-------------------------
+
+Without these principles, code can become:
+
+-   Tightly coupled
+
+-   Hard to test
+
+-   Difficult to change
+
+-   Prone to bugs
+
+By following SOLID, your code becomes:
+
+-   **Easier to understand**
+
+-   **Easier to extend with new features**
+
+-   **Easier to maintain and debug**
+
+-   **Easier to test (unit/integration)**
+
+-   **A good foundation for applying design patterns**
+
+✅ Summary
+---------
+
+-   **SOLID** is a set of five key principles for building well-structured, maintainable, and testable object-oriented software.
+
+-   These principles **guide your thinking** when choosing or building design patterns.
+
+-   In Salesforce Apex, they help you build code that's easier to **test, change, and scale**.
+
+-   Learning SOLID is like learning the **grammar of clean software design** --- design patterns are the **sentences** you write with it.
