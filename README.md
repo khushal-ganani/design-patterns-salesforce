@@ -394,6 +394,8 @@ https://github.com/khushal-ganani/design-patterns-salesforce/blob/4002fe9ec3aa53
 - **✅ Keep Base Classes Simple** : Don’t call virtual or abstract methods in constructors or base logic defined in the base class unexpectedly. Also, avoid deep Inheritance hierarchies.
 - **✅ Use Interfaces for Behavior Extension** : This allows behavior injection without inheritance coupling.
 
+---
+
 ## SOLID Principles
 
 **SOLID is an acronym for five design principles** intended to make software systems more **understandable, flexible, and maintainable**. These principles are fundamental in Object-Oriented Programming (OOP) and lay the foundation for good software design.
