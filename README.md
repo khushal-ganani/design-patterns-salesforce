@@ -537,3 +537,81 @@ https://github.com/khushal-ganani/design-patterns-salesforce/blob/aeb4371cc7c23d
 | 🔄 Easy to change | Changing queue name only affects `CaseOwnerAssigner` |
 | ➕ Easier to add features | Want to send Slack message? Just add a new class like `SlackNotifier` |
 | 📦 Clean architecture | Each class does **one job**, making the system modular |
+
+### O - Open/Closed Principle
+
+> **"Software entities (classes, modules, functions, etc.) should be open for extension, but closed for modification."**
+
+This means:
+-   You **should be able to add new behaviour** without changing existing, tested, working code.
+-   You **achieve this with abstraction** (interfaces, virtual classes) and **polymorphism** (override methods, strategies, etc.).
+
+**📘 Real-Life Salesforce Scenario**
+
+> Your company uses Salesforce to manage **Orders** and each Order can come from different **Sales Channels** (e.g., `Online`, `Partner`, `Internal`, `Marketplace`, etc.).
+
+**Each sales channel has a different commission calculation rule:**
+-   **Online:** 12% commission
+-   **Partner:** 10% + bonus if over ₹100,000
+-   **Internal:** No commission
+-   **Marketplace:** 8% + flat platform fee deduction
+
+You need to calculate and populate the `Commission__c` field for each `Order__c` record based on its `Channel__c`.
+
+New channels might be added frequently in the future.
+
+**❌ Bad Design -- Violates OCP**
+
+Here's a version that does everything in one class:
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/4c042dabac79ff3f4e8123ab485d867583d708bd/force-app/main/default/classes/SOLID/O%20-%20Open-Closed%20Principle/OrderCommissionCalculator_Bad.cls#L1-L42
+
+**❌ Problems:**
+-   Every time a new channel is introduced or logic changes, you **must modify** this class.
+-   Very hard to test each channel independently.
+-   You risk **breaking working logic** while adding new logic.
+-   Violates **Open/Closed Principle**.
+
+**✅ Good Design -- Follows OCP (Open for Extension, Closed for Modification)**
+
+We'll refactor using **abstraction + polymorphism**.
+
+**1️⃣ Define the Strategy Interface**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/4c042dabac79ff3f4e8123ab485d867583d708bd/force-app/main/default/classes/SOLID/O%20-%20Open-Closed%20Principle/ICommissionCalculator.cls#L1-L3
+
+**2️⃣ Implement Channel-Specific Strategies**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/4c042dabac79ff3f4e8123ab485d867583d708bd/force-app/main/default/classes/SOLID/O%20-%20Open-Closed%20Principle/OnlineOrderCommissionCalculator.cls#L1-L11
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/4c042dabac79ff3f4e8123ab485d867583d708bd/force-app/main/default/classes/SOLID/O%20-%20Open-Closed%20Principle/PartnerOrderCommissionCalculator.cls#L1-L11
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/4c042dabac79ff3f4e8123ab485d867583d708bd/force-app/main/default/classes/SOLID/O%20-%20Open-Closed%20Principle/InternalOrderCommissionCalculator.cls#L1-L11
+
+**3️⃣ Define the `OrderCommissionCalculator_Good`**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/4c042dabac79ff3f4e8123ab485d867583d708bd/force-app/main/default/classes/SOLID/O%20-%20Open-Closed%20Principle/OrderCommissionCalculator_Good.cls#L1-L18
+
+**🚀 Future Expansion — The OCP Power**
+
+Suppose your company introduces a new channel: `Marketplace`, where there is a different Commission calculation logic.
+
+All you do is:
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/4c042dabac79ff3f4e8123ab485d867583d708bd/force-app/main/default/classes/SOLID/O%20-%20Open-Closed%20Principle/MarketplaceOrderCommissionCalculator.cls#L1-L11
+
+And update the Map in the `OrderCommissionCalculator_Good` class: 
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/4c042dabac79ff3f4e8123ab485d867583d708bd/force-app/main/default/classes/SOLID/O%20-%20Open-Closed%20Principle/OrderCommissionCalculator_Good.cls#L1-L7
+
+- ✅ No changes to existing logic and `OrderCommissionCalculator` class (just a minimum change of the `static Map<String, System.Type>`).
+- ✅ No impact on existing tested logic.
+- ✅ Open to extension, but closed to modification.
+
+**🧠 Summary**
+
+| 🔍 Principle | 💬 Explanation |
+| --- | --- |
+| **Open/Closed** | You can **extend** the system for new logic without **modifying existing code** |
+| **How** | Using **interfaces** and **strategy pattern** |
+| **Why** | Safer, more testable, scalable and maintainable |
