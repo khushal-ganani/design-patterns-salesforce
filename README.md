@@ -454,3 +454,86 @@ By following SOLID, your code becomes:
 -   In Salesforce Apex, they help you build code that's easier to **test, change, and scale**.
 
 -   Learning SOLID is like learning the **grammar of clean software design** --- design patterns are the **sentences** you write with it.
+
+### S - Single Responsibility Principle
+
+The Single Responsibility Principle states that: **“A class/module should have only one reason to change, meaning that it should have only one responsibility or purpose.”**
+
+This principle encourages you to create classes that are more focused and perform a single well-defined task, rather than multiple tasks. Breaking up classes into smaller, more focused units makes code easier to understand, maintain, and test.
+
+🔍 Real-Life Salesforce Scenario
+--------------------------------
+
+**💼 Business Requirement:**
+
+> When a **Case** is created in Salesforce:
+
+1.  It should automatically assign the **Support Queue** as the owner.
+
+2.  It should **send a notification email** to the assigned queue.
+
+3.  It should create a custom object record (e.g., `CaseAudit__c`) to log the event.
+
+4.  It should send a Slack message to support channel (in the future).
+
+We will first **violate SRP** and then **refactor it** using SRP.
+
+* * * * *
+
+**❌ Bad Design (Violates SRP)**
+---------------------------
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/aeb4371cc7c23d90b9251a21553cfa9d611730b1/force-app/main/default/classes/SOLID/S%20-%20Single%20Responsibility%20Principle/CaseTriggerHandler_Bad.cls#L1-L36
+
+### ❌ Problems with the Above Code:
+
+| Problem | Why it's bad |
+| --- | --- |
+| 🚨 Too many responsibilities | Assigning owner, sending email, logging audit |
+| ❌ Hard to maintain | Any change to one behaviour affects others |
+| ❌ Hard to test | Can't test email or audit separately |
+| ❌ Hard to extend | Adding Slack or SMS later will clutter it even more |
+
+* * * * *
+
+✅ Refactored Design Using SRP
+-----------------------------
+
+We break the logic into separate classes --- each doing **one job**. This follows SRP.
+
+* * * * *
+
+**1️⃣ CaseOwnerAssigner -- Assigns to queue**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/aeb4371cc7c23d90b9251a21553cfa9d611730b1/force-app/main/default/classes/SOLID/S%20-%20Single%20Responsibility%20Principle/CaseOwnerAssigner.cls#L1-L8
+
+* * * * *
+
+**2️⃣ CaseNotifier -- Sends email notifications**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/aeb4371cc7c23d90b9251a21553cfa9d611730b1/force-app/main/default/classes/SOLID/S%20-%20Single%20Responsibility%20Principle/CaseNotifier.cls#L1-L14
+
+* * * * *
+
+**3️⃣ CaseAuditLogger -- Creates audit record**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/aeb4371cc7c23d90b9251a21553cfa9d611730b1/force-app/main/default/classes/SOLID/S%20-%20Single%20Responsibility%20Principle/CaseAuditLogger.cls#L1-L14
+
+* * * * *
+
+**4️⃣ CaseTiggerHandler -- Now acts as an orchestrator**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/aeb4371cc7c23d90b9251a21553cfa9d611730b1/force-app/main/default/classes/SOLID/S%20-%20Single%20Responsibility%20Principle/CaseTriggerHandler_Good.cls#L1-L14
+
+* * * * *
+
+✅ Benefits of Following SRP
+---------------------------
+
+| Benefit | Explanation |
+| --- | --- |
+| 🔁 Reusable code | You can reuse `CaseNotifier` in other places |
+| 🧪 Easier testing | Test each class in isolation |
+| 🔄 Easy to change | Changing queue name only affects `CaseOwnerAssigner` |
+| ➕ Easier to add features | Want to send Slack message? Just add a new class like `SlackNotifier` |
+| 📦 Clean architecture | Each class does **one job**, making the system modular |
