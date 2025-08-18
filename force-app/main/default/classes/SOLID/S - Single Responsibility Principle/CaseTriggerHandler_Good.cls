@@ -3,12 +3,12 @@ public with sharing class CaseTriggerHandler_Good {
     private CaseNotifier notifier = new CaseNotifier();
     private CaseAuditLogger logger = new CaseAuditLogger();
 
-    public void handleBeforeInsert (Case c) {
-        assigner.assignQueue(c);
+    public void handleBeforeInsert (List<Case> newCases) {
+        assigner.assignQueue(newCases);
     }
 
-    public void handleAfterInsert (Case c) {
-        notifier.notifySupport(c);
-        logger.logCreation(c);
+    public void handleAfterInsert (List<Case> newCases) {
+        notifier.notifySupport(newCases);
+        logger.logCreation(newCases);
     }
 }
