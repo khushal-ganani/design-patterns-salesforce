@@ -523,7 +523,7 @@ https://github.com/khushal-ganani/design-patterns-salesforce/blob/aeb4371cc7c23d
 
 **4️⃣ CaseTiggerHandler -- Now acts as an orchestrator**
 
-https://github.com/khushal-ganani/design-patterns-salesforce/blob/aeb4371cc7c23d90b9251a21553cfa9d611730b1/force-app/main/default/classes/SOLID/S%20-%20Single%20Responsibility%20Principle/CaseTriggerHandler_Good.cls#L1-L14
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/fce6a0b76b9a4ac384a70d9fe0e8f9d38b8f61fd/force-app/main/default/classes/SOLID/S%20-%20Single%20Responsibility%20Principle/CaseTriggerHandler_Good.cls#L1-L14
 
 * * * * *
 
