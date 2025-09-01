@@ -408,8 +408,7 @@ https://github.com/khushal-ganani/design-patterns-salesforce/blob/4002fe9ec3aa53
 | **I** | Interface Segregation Principle (ISP) | Clients should not be forced to depend on **methods/interfaces they do not use** |
 | **D** | Dependency Inversion Principle (DIP) | Depend on **abstractions**, not on concrete implementations |
 
-🎯 How Do SOLID Principles Relate to Design Patterns?
--------------------------------------------------------
+### 🎯 How Do SOLID Principles Relate to Design Patterns?
 
 > Think of **SOLID** principles as the **"rules" or "guiding principles"** of clean object-oriented design.\
 > Think of **Design Patterns** as **"solutions to recurring design problems"**.
@@ -419,8 +418,7 @@ If you **understand SOLID**, you'll:
 -   Avoid misusing patterns (e.g., using inheritance wrongly),
 -   Build your **own reusable designs** effectively.
 
-✅ Why Are They Important?
--------------------------
+### ✅ Why Are They Important?
 
 Without these principles, code can become:
 
@@ -444,8 +442,7 @@ By following SOLID, your code becomes:
 
 -   **A good foundation for applying design patterns**
 
-✅ Summary
----------
+### ✅ Summary
 
 -   **SOLID** is a set of five key principles for building well-structured, maintainable, and testable object-oriented software.
 
@@ -461,8 +458,7 @@ The Single Responsibility Principle states that: **“A class/module should have
 
 This principle encourages you to create classes that are more focused and perform a single well-defined task, rather than multiple tasks. Breaking up classes into smaller, more focused units makes code easier to understand, maintain, and test.
 
-🔍 Real-Life Salesforce Scenario
---------------------------------
+**🔍 Real-Life Salesforce Scenario**
 
 **💼 Business Requirement:**
 
@@ -481,11 +477,10 @@ We will first **violate SRP** and then **refactor it** using SRP.
 * * * * *
 
 **❌ Bad Design (Violates SRP)**
----------------------------
 
 https://github.com/khushal-ganani/design-patterns-salesforce/blob/aeb4371cc7c23d90b9251a21553cfa9d611730b1/force-app/main/default/classes/SOLID/S%20-%20Single%20Responsibility%20Principle/CaseTriggerHandler_Bad.cls#L1-L36
 
-### ❌ Problems with the Above Code:
+**❌ Problems with the Above Code:**
 
 | Problem | Why it's bad |
 | --- | --- |
@@ -496,8 +491,7 @@ https://github.com/khushal-ganani/design-patterns-salesforce/blob/aeb4371cc7c23d
 
 * * * * *
 
-✅ Refactored Design Using SRP
------------------------------
+**✅ Refactored Design Using SRP**
 
 We break the logic into separate classes --- each doing **one job**. This follows SRP.
 
@@ -527,8 +521,7 @@ https://github.com/khushal-ganani/design-patterns-salesforce/blob/fce6a0b76b9a4a
 
 * * * * *
 
-✅ Benefits of Following SRP
----------------------------
+**✅ Benefits of Following SRP**
 
 | Benefit | Explanation |
 | --- | --- |
