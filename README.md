@@ -608,3 +608,146 @@ https://github.com/khushal-ganani/design-patterns-salesforce/blob/4c042dabac79ff
 | **Open/Closed** | You can **extend** the system for new logic without **modifying existing code** |
 | **How** | Using **interfaces** and **strategy pattern** |
 | **Why** | Safer, more testable, scalable and maintainable |
+
+### L - Liskov Substitution Principle
+
+**Overview**
+> Objects of a superclass should be replaceable with objects of its subclasses without breaking the application functionality.
+
+The Liskov Substitution Principle (LSP) is the "L" in the SOLID principles of object-oriented design. This principle ensures that inheritance relationships are designed correctly and that subclasses can seamlessly replace their parent classes without causing unexpected behaviour.
+
+In practical terms, LSP means that if you have a method that expects a `Vehicle` object, you should be able to pass it a `Car` object, `Truck` object, or any other subclass of `Vehicle` without the method failing or behaving unexpectedly. The subclass should honour the "contract" established by the parent class.
+
+This principle is crucial for creating robust and maintainable inheritance hierarchies, ensuring that polymorphism works correctly in your Salesforce Apex applications.
+
+**📘 Real Life Salesforce Scenario**
+
+Your company processes various types of **Payment Methods** in Salesforce, and each payment type has different processing rules and validation requirements.
+
+**The payment types include:**
+- **Credit Card:** Requires card validation, authorization, and charges processing fees
+- **Bank Transfer:** Requires account verification and has longer processing times
+- **Digital Wallet:** Requires token validation and instant processing
+- **Gift Card:** Requires balance checking and redemption tracking
+
+You need to create a flexible system that allows any payment processor to handle different payment types without requiring knowledge of their specific implementation details, ensuring that all payment methods can be used interchangeably.
+
+**❌ Bad Example (Anti-Pattern)**
+
+A common violation of LSP occurs when subclasses change the expected behavior of the parent class methods, throw unexpected exceptions, or have different preconditions/postconditions than the parent class.
+
+**Code Example - Bad Implementation**
+
+**📃 The contract (`abstract` class)**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/6de2d9c35af5b85be144412e7faf49af4554ea21/force-app/main/default/classes/SOLID/L%20-%20Liskov%20Substitution%20Principle/Bad%20Example/PaymentProcessor_Bad.cls#L1-L5
+
+**1️⃣ The Credit Card Processor Strategy**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/6de2d9c35af5b85be144412e7faf49af4554ea21/force-app/main/default/classes/SOLID/L%20-%20Liskov%20Substitution%20Principle/Bad%20Example/CreditCardProcessor_Bad.cls#L1-L17
+
+**2️⃣ The Gift Card Processor Strategy**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/6de2d9c35af5b85be144412e7faf49af4554ea21/force-app/main/default/classes/SOLID/L%20-%20Liskov%20Substitution%20Principle/Bad%20Example/GiftCardProcessor_Bad.cls#L1-L22
+
+**3️⃣ The Bank Transfer Processor Strategy**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/6de2d9c35af5b85be144412e7faf49af4554ea21/force-app/main/default/classes/SOLID/L%20-%20Liskov%20Substitution%20Principle/Bad%20Example/BankTransferProcessor_Bad.cls#L1-L17
+
+**❌ Usage - Bad Example**
+
+**The Service Class**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/6de2d9c35af5b85be144412e7faf49af4554ea21/force-app/main/default/classes/SOLID/L%20-%20Liskov%20Substitution%20Principle/Bad%20Example/PaymentService_Bad.cls#L1-L21
+
+**Usage of the Service Class (Anonymous Window)**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/6de2d9c35af5b85be144412e7faf49af4554ea21/scripts/apex/SOLID/L%20-%20Liskov%20Substitution%20Principle/LSPBadExample.apex#L1-L8
+
+**Problems with This Approach**
+
+| Problem | Description | Impact |
+|---------|-------------|---------|
+| **Unexpected Exceptions** | Subclasses throw exceptions that parent class contract doesn't specify | Client code breaks when switching between implementations |
+| **Inconsistent Return Values** | Different subclasses return different types of values (negative fees, always false) | Business logic produces incorrect results |
+| **Changed Preconditions** | Subclasses have stricter requirements than parent class | Code that works with parent class fails with subclasses |
+| **Broken Contracts** | Methods don't fulfill the promises made by the parent class interface | Polymorphism becomes unreliable and dangerous |
+| **Unpredictable Behavior** | Each subclass behaves differently in unexpected ways | System becomes fragile and hard to maintain |
+
+**✅ Good Example (Proper Implementation following LSP)**
+
+The correct implementation ensures that all subclasses can be used interchangeably with the parent class, maintaining consistent behaviour and honouring the established contract.
+
+**Code Example - Good Implementation**
+
+**📃 Abstract Payment Processor Base Class**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/6de2d9c35af5b85be144412e7faf49af4554ea21/force-app/main/default/classes/SOLID/L%20-%20Liskov%20Substitution%20Principle/Good%20Example/PaymentProcessor_Good.cls#L1-L24
+
+**1️⃣ Credit Card Processor Implementation**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/6de2d9c35af5b85be144412e7faf49af4554ea21/force-app/main/default/classes/SOLID/L%20-%20Liskov%20Substitution%20Principle/Good%20Example/CreditCardProcessor_Good.cls#L1-L38
+
+**2️⃣ Gift Card Processor Implementation**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/6de2d9c35af5b85be144412e7faf49af4554ea21/force-app/main/default/classes/SOLID/L%20-%20Liskov%20Substitution%20Principle/Good%20Example/GiftCardProcessor_Good.cls#L1-L39
+
+**3️⃣ Bank Transfer Processor Implementation**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/6de2d9c35af5b85be144412e7faf49af4554ea21/force-app/main/default/classes/SOLID/L%20-%20Liskov%20Substitution%20Principle/Good%20Example/BankTransferProcessor_Good.cls#L1-L37
+
+**✅ Usage - Good Example**
+
+**The Service Class**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/6de2d9c35af5b85be144412e7faf49af4554ea21/force-app/main/default/classes/SOLID/L%20-%20Liskov%20Substitution%20Principle/Good%20Example/PaymentService_Good.cls#L1-L40
+
+**Usage of the Service Class (Anonymous Window)**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/6de2d9c35af5b85be144412e7faf49af4554ea21/scripts/apex/SOLID/L%20-%20Liskov%20Substitution%20Principle/LSPGoodExample.apex#L1-L9
+
+**Benefits of This Approach**
+
+| Benefit | Description | Business Value |
+|---------|-------------|----------------|
+| **Interchangeability** | Any payment processor can be used without changing client code | Easy to add new payment methods without system changes |
+| **Consistent Behavior** | All processors follow the same contract and behavioral expectations | Predictable system behavior and fewer bugs |
+| **Simplified Testing** | Mock implementations can easily replace real processors | Better test coverage and easier unit testing |
+| **Future-Proof Design** | New payment types can be added without modifying existing code | Reduced development time for new features |
+
+**Key Benefits**
+
+- ✅ **Seamless Substitutability**: Any subclass can replace the parent class without breaking functionality
+- ✅ **Behavioral Consistency**: All implementations follow the same contract and expectations
+- ✅ **Reduced Coupling**: Client code depends on abstractions, not concrete implementations
+- ✅ **Enhanced Polymorphism**: True polymorphic behavior where objects can be used interchangeably
+- ✅ **Easier Maintenance**: Changes to specific implementations don't affect client code
+
+**✅ When to Use**
+
+- When designing inheritance hierarchies with multiple implementations
+- When you need polymorphic behavior where objects should be interchangeable
+- When building plugin-style architectures in Salesforce
+- When creating frameworks or reusable components that others will extend
+- When implementing the Strategy pattern or similar behavioral patterns
+- When you have multiple ways to accomplish the same business goal
+
+**❌ When NOT to Use**
+
+- When subclasses have fundamentally different purposes or behaviors
+- When the relationship is "has-a" rather than "is-a" (use composition instead)
+- When subclasses would need to violate the parent class contract
+- For simple utility classes that don't need inheritance
+- When performance is critical and polymorphism adds unnecessary overhead
+
+**💡 Real-World Salesforce Scenarios**
+
+1. **Notification Systems**: Different notification channels (Email, SMS, Push) that all implement a common `NotificationSender` interface, allowing the system to send notifications through any channel without knowing the specific implementation.
+
+2. **Data Validation Frameworks**: Various validation rules (Required Field, Format, Range) that all extend a base `ValidationRule` class, enabling the validation engine to process any rule type uniformly.
+
+3. **Integration Adapters**: Different external system connectors (REST API, SOAP, Database) that all implement a common `ExternalSystemAdapter` interface, allowing the integration layer to work with any system using the same code.
+
+**📃 Summary**
+
+The Liskov Substitution Principle ensures that inheritance relationships are designed correctly by requiring subclasses to be fully substitutable for their parent classes. In Salesforce development, this principle helps create robust, flexible systems where new implementations can be added without breaking existing functionality, leading to more maintainable and extensible code that truly leverages the power of object-oriented programming.
