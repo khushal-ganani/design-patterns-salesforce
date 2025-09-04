@@ -751,3 +751,131 @@ https://github.com/khushal-ganani/design-patterns-salesforce/blob/6de2d9c35af5b8
 **📃 Summary**
 
 The Liskov Substitution Principle ensures that inheritance relationships are designed correctly by requiring subclasses to be fully substitutable for their parent classes. In Salesforce development, this principle helps create robust, flexible systems where new implementations can be added without breaking existing functionality, leading to more maintainable and extensible code that truly leverages the power of object-oriented programming.
+
+### I - Interface Segregation Principle (ISP)
+
+**Overview**
+> Clients should not be forced to depend on interfaces they do not use.
+
+The Interface Segregation Principle is the "I" in SOLID principles and focuses on creating focused, role-specific interfaces rather than monolithic ones. This principle states that no class should be forced to implement methods it doesn't need or use. Instead of having one large interface that handles multiple responsibilities, we should break it down into smaller, more specific interfaces that serve particular needs.
+
+**Key Benefits:**
+- **Reduces coupling** between classes and unnecessary dependencies
+- **Improves maintainability** by making interfaces focused and cohesive
+- **Enhances flexibility** by allowing classes to implement only what they need
+
+**📧 Real Life Salesforce Scenario**
+
+Your Salesforce org needs to send **Notifications** to different types of users based on various events:
+
+**User Types and Their Notification Needs:**
+- **Customers:** Need email notifications only
+- **Sales Reps:** Need email and SMS notifications
+- **Managers:** Need email, SMS, and push notifications to mobile app
+
+Currently, you have a single notification interface that all notification services must implement, but most services only need a subset of these notification methods.
+
+**❌ Bad Example (Anti-Pattern)**
+
+The violation occurs when we create a single "fat" interface that forces all implementing classes to implement notification methods they don't support.
+
+**❌ Code Example - Bad Implementation**
+
+**The Fat Interface**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/0f842c3d802801bd403d20b5647a4ab1c4334a72/force-app/main/default/classes/SOLID/I%20-%20Interface%20Segregation%20Principle/Bad%20Example/NotificationService_Bad.cls#L1-L6
+
+**The Implementation**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/0f842c3d802801bd403d20b5647a4ab1c4334a72/force-app/main/default/classes/SOLID/I%20-%20Interface%20Segregation%20Principle/Bad%20Example/CustomerNotificationService_Bad.cls#L1-L18
+
+**❌ Usage - Bad Example**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/0f842c3d802801bd403d20b5647a4ab1c4334a72/scripts/apex/SOLID/I%20-%20Interface%20Segregation%20Principle/ISPBadExample.apex#L1-L13
+
+**❌ Problems with This Approach**
+
+| Problem | Description | Impact |
+|---------|-------------|---------|
+| **Forced Implementation** | Classes must implement methods they don't support | Leads to exceptions or empty implementations |
+| **Interface Pollution** | Single interface contains unrelated notification methods | Difficult to understand what each service actually supports |
+| **Runtime Errors** | Unused methods throw exceptions when called | Creates unreliable code that fails at runtime |
+| **Tight Coupling** | All services depend on all notification types | Changes affect services that don't use those methods |
+
+**✅ Good Example (Proper Implementation following ISP)**
+
+The correct approach is to segregate the interface into smaller, focused interfaces based on specific notification types. Each service implements only the notification methods it actually supports.
+
+**✅ Code Example - Good Implementation**
+
+**1️⃣ Segregated Notification Interfaces**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/0f842c3d802801bd403d20b5647a4ab1c4334a72/force-app/main/default/classes/SOLID/I%20-%20Interface%20Segregation%20Principle/Good%20Example/EmailNotifier_Good.cls#L1-L3
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/0f842c3d802801bd403d20b5647a4ab1c4334a72/force-app/main/default/classes/SOLID/I%20-%20Interface%20Segregation%20Principle/Good%20Example/SMSNotifier_Good.cls#L1-L3
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/0f842c3d802801bd403d20b5647a4ab1c4334a72/force-app/main/default/classes/SOLID/I%20-%20Interface%20Segregation%20Principle/Good%20Example/PushNotifier_Good.cls#L1-L3
+
+**2️⃣ Focused Implementation Classes**
+
+**Notifications for Customers**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/0f842c3d802801bd403d20b5647a4ab1c4334a72/force-app/main/default/classes/SOLID/I%20-%20Interface%20Segregation%20Principle/Good%20Example/CustomerNotificationService_Good.cls#L1-L6
+
+**Notifications for Sales Reps**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/0f842c3d802801bd403d20b5647a4ab1c4334a72/force-app/main/default/classes/SOLID/I%20-%20Interface%20Segregation%20Principle/Good%20Example/SalesRepNotificationService_Good.cls#L1-L11
+
+**Notifications for Manager**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/0f842c3d802801bd403d20b5647a4ab1c4334a72/force-app/main/default/classes/SOLID/I%20-%20Interface%20Segregation%20Principle/Good%20Example/ManagerNotificationService_Good.cls#L1-L16
+
+**✅ Usage - Good Example**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/0f842c3d802801bd403d20b5647a4ab1c4334a72/scripts/apex/SOLID/I%20-%20Interface%20Segregation%20Principle/ISPGoodExample.apex#L1-L18
+
+**✅ Benefits of This Approach**
+
+| Benefit | Description | Impact |
+|---------|-------------|---------|
+| **No Forced Methods** | Classes only implement methods they actually support | No exceptions or empty implementations |
+| **Clear Contracts** | Each interface represents a specific capability | Easy to understand what each service can do |
+| **Flexible Composition** | Services can implement multiple focused interfaces | Mix and match capabilities as needed |
+| **Isolated Changes** | Changes to one notification type don't affect others | Better maintainability and stability |
+
+**✅ Key Benefits**
+
+- ✅ **Eliminates unnecessary methods** - Classes only implement what they actually support
+- ✅ **Clear responsibilities** - Each interface has a single, focused purpose
+- ✅ **Better composition** - Services can combine multiple capabilities as needed
+- ✅ **No runtime exceptions** - All implemented methods are actually supported
+- ✅ **Easier testing** - Can mock specific notification types independently
+- ✅ **Improved maintainability** - Changes are isolated to relevant interfaces
+
+**🎯 When to Use**
+
+- When classes implement interface methods by throwing exceptions or leaving them empty
+- When different clients need different subsets of functionality
+- When you have a "fat" interface that serves multiple types of users
+- When changes to interface methods affect classes that don't use those methods
+- When designing systems with optional or conditional capabilities
+
+**⚠️ When NOT to Use**
+
+- When all implementing classes genuinely need all interface methods
+- When interfaces are already small and focused
+- When over-segregation creates unnecessary complexity
+- In simple systems where a single interface is sufficient
+- When the cost of multiple interfaces outweighs the benefits
+
+**🌟 Real-World Salesforce Scenarios**
+
+1. **Record Processing**: Separate interfaces for validation, transformation, and persistence rather than one large record processor interface
+
+2. **API Integrations**: Different interfaces for authentication, data retrieval, and data pushing instead of one monolithic API interface
+
+3. **Reporting Services**: Segregated interfaces for data extraction, formatting, and delivery rather than forcing all report types to support all operations
+
+**📝 Summary**
+
+The Interface Segregation Principle ensures that classes only depend on the methods they actually use by creating focused, role-specific interfaces. In Salesforce development, this leads to cleaner, more maintainable code where each class implements only the capabilities it genuinely supports, eliminating forced implementations and runtime exceptions.
