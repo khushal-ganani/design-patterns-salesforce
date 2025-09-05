@@ -879,3 +879,131 @@ https://github.com/khushal-ganani/design-patterns-salesforce/blob/0f842c3d802801
 **📝 Summary**
 
 The Interface Segregation Principle ensures that classes only depend on the methods they actually use by creating focused, role-specific interfaces. In Salesforce development, this leads to cleaner, more maintainable code where each class implements only the capabilities it genuinely supports, eliminating forced implementations and runtime exceptions.
+
+### D - Dependency Inversion Principle (DIP)
+
+**Overview**
+> The Dependency Inversion Principle states that high-level modules should not depend on low-level modules. Both should depend on abstractions. Additionally, abstractions should not depend on details; details should depend on abstractions.
+
+The Dependency Inversion Principle is the "D" in SOLID principles and is fundamental to creating flexible, maintainable code. Instead of having your business logic classes directly instantiate and depend on concrete implementations, they should depend on interfaces or abstract classes.
+
+**Key concepts include:**
+- **High-level modules** (business logic) should not depend on **low-level modules** (implementation details)
+- Both should depend on **abstractions** (interfaces/abstract classes)
+- **Dependency Injection** is a technique to achieve DIP by injecting dependencies from the outside
+
+**📧 Real Life Salesforce Scenario**
+
+Your company uses Salesforce to process **Orders** and needs to send notifications when orders are created. The system should support multiple notification channels and be flexible enough to add new ones without changing existing code.
+
+**Current requirements:**
+- Send **email notifications** to customers via Email Service
+- Send **SMS notifications** for high-priority orders via SMS Service  
+- **Future**: Add Slack notifications, push notifications, etc.
+
+You need to build an `OrderProcessor` that can handle notifications through different channels without being tightly coupled to specific notification implementations.
+
+**❌ Bad Example (Anti-Pattern)**
+
+In this approach, the `OrderProcessor` directly depends on concrete notification classes, violating the Dependency Inversion Principle. The high-level module (OrderProcessor) depends directly on low-level modules (EmailService, SMSService).
+
+**🚫 Code Example - Bad Implementation**
+
+**Email Service Class**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/e9df00427f9d2700fe4ecad5afc49fa3fb65cb4d/force-app/main/default/classes/SOLID/D%20-%20Dependency%20Inversion%20Principle/Bad%20Example/EmailService_Bad.cls#L1-L14
+
+**SMS Service Class**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/e9df00427f9d2700fe4ecad5afc49fa3fb65cb4d/force-app/main/default/classes/SOLID/D%20-%20Dependency%20Inversion%20Principle/Bad%20Example/SMSService_Bad.cls#L1-L13
+
+**Order Processor Class**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/e9df00427f9d2700fe4ecad5afc49fa3fb65cb4d/force-app/main/default/classes/SOLID/D%20-%20Dependency%20Inversion%20Principle/Bad%20Example/OrderProcessor_Bad.cls#L1-L24
+
+**🔧 Usage - Bad Example**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/e9df00427f9d2700fe4ecad5afc49fa3fb65cb4d/scripts/apex/SOLID/D%20-%20Dependency%20Inversion%20Principle/DIPBadExample.apex#L1-L11
+
+**⚠️ Problems with This Approach**
+
+| Problem | Description | Impact |
+|---------|-------------|---------|
+| **Tight Coupling** | OrderProcessor directly creates and depends on concrete classes | Hard to modify or extend notification types |
+| **Difficult Testing** | Cannot easily mock EmailService or SMSService for unit tests | Poor testability and test coverage |
+| **Violates Open/Closed** | Must modify OrderProcessor to add new notification types | Breaks existing functionality when adding features |
+| **Hard to Configure** | Cannot change notification services at runtime | Inflexible system configuration |
+| **Code Duplication** | Similar notification logic repeated for each service type | Maintenance overhead and inconsistency |
+
+**✅ Good Example (Proper Implementation following DIP)**
+
+The correct implementation uses interfaces (abstractions) that both high-level and low-level modules depend on. The `OrderProcessor` depends on the `INotificationService` interface, not concrete implementations. Dependencies are injected from outside, following the Dependency Injection pattern.
+
+**🎯 Code Example - Good Implementation**
+
+**1️⃣ Notification Service Interface**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/e9df00427f9d2700fe4ecad5afc49fa3fb65cb4d/force-app/main/default/classes/SOLID/D%20-%20Dependency%20Inversion%20Principle/Good%20Example/INotificationService.cls#L1-L4
+
+**2️⃣ Email Service Implementation**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/e9df00427f9d2700fe4ecad5afc49fa3fb65cb4d/force-app/main/default/classes/SOLID/D%20-%20Dependency%20Inversion%20Principle/Good%20Example/EmailService_Good.cls#L1-L18
+
+**3️⃣ SMS Service Implementation**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/e9df00427f9d2700fe4ecad5afc49fa3fb65cb4d/force-app/main/default/classes/SOLID/D%20-%20Dependency%20Inversion%20Principle/Good%20Example/SMSService_Good.cls#L1-L18
+
+**4️⃣ Order Processor (High-Level Module)**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/e9df00427f9d2700fe4ecad5afc49fa3fb65cb4d/force-app/main/default/classes/SOLID/D%20-%20Dependency%20Inversion%20Principle/Good%20Example/OrderProcessor_Good.cls#L1-L17
+
+**🚀 Usage - Good Example**
+
+https://github.com/khushal-ganani/design-patterns-salesforce/blob/e9df00427f9d2700fe4ecad5afc49fa3fb65cb4d/scripts/apex/SOLID/D%20-%20Dependency%20Inversion%20Principle/DIPGoodExample.apex#L1-L15
+
+**🎉 Benefits of This Approach**
+
+| Benefit | Description | Value |
+|---------|-------------|--------|
+| **Loose Coupling** | OrderProcessor depends on interface, not concrete classes | Easy to swap implementations |
+| **Easy Testing** | Can inject mock services for unit testing | Better test coverage and reliability |
+| **Extensibility** | Add new notification types without changing existing code | Follows Open/Closed Principle |
+| **Flexibility** | Can configure different services at runtime | Adaptable to changing requirements |
+| **Maintainability** | Changes to notification logic don't affect OrderProcessor | Reduced maintenance overhead |
+
+**✨ Key Benefits**
+
+- ✅ **Follows SOLID Principles**: Especially DIP and Open/Closed Principle
+- ✅ **Improved Testability**: Easy to mock dependencies for unit testing
+- ✅ **Better Flexibility**: Can easily add new notification channels (Slack, Teams, etc.)
+- ✅ **Reduced Coupling**: High-level modules independent of low-level implementation details
+- ✅ **Runtime Configuration**: Can change notification services without code changes
+- ✅ **Code Reusability**: Notification services can be reused across different processors
+
+**🎯 When to Use**
+
+- When building service layers that depend on external systems (APIs, databases, email services)
+- When you need to support multiple implementations of the same functionality
+- When creating testable code that requires dependency mocking
+- When building configurable systems that need to swap implementations
+- When working with integrations that may change frequently
+- For any business logic that depends on infrastructure concerns
+
+**🚨 When NOT to Use**
+
+- For simple, one-time scripts or utilities with no testing requirements
+- When you're absolutely certain the implementation will never change
+- For very small projects where the overhead doesn't justify the benefits
+- When working with Salesforce standard objects that have fixed APIs
+- For simple data transformations that don't involve external dependencies
+
+**🏢 Real-World Salesforce Scenarios**
+
+1. **Payment Processing**: OrderProcessor depending on IPaymentGateway (Stripe, PayPal, Square) implementations
+2. **Data Synchronisation**: SyncService depending on IDataRepository (Salesforce, External DB, File System) implementations  
+3. **Document Generation**: ReportGenerator depending on IDocumentService (PDF, Word, Excel) implementations
+4. **Lead Assignment**: LeadDistributor depending on IAssignmentStrategy (Round-Robin, Territory-Based, Skills-Based) implementations
+
+**💡 Summary**
+
+The Dependency Inversion Principle, combined with Dependency Injection, creates flexible and maintainable Salesforce applications. By depending on abstractions rather than concrete implementations, your business logic becomes independent of infrastructure concerns, making your code more testable, extensible, and robust. This is especially valuable in Salesforce environments where integrations and business requirements frequently evolve.
