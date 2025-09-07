@@ -1007,3 +1007,103 @@ https://github.com/khushal-ganani/design-patterns-salesforce/blob/e9df00427f9d27
 **💡 Summary**
 
 The Dependency Inversion Principle, combined with Dependency Injection, creates flexible and maintainable Salesforce applications. By depending on abstractions rather than concrete implementations, your business logic becomes independent of infrastructure concerns, making your code more testable, extensible, and robust. This is especially valuable in Salesforce environments where integrations and business requirements frequently evolve.
+
+---
+
+## Gang of Four Design Patterns in Salesforce Development
+
+### Introduction
+
+The Gang of Four (GoF) Design Patterns, introduced by Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides in their seminal book "Design Patterns: Elements of Reusable Object-Oriented Software," provide time-tested solutions to common software design problems. For Salesforce developers working with Apex, these patterns offer powerful approaches to writing maintainable, scalable, and robust code within the Salesforce ecosystem.
+
+While Salesforce's platform has its own unique constraints—such as governor limits, the multi-tenant architecture, and specific execution contexts—the fundamental principles of GoF patterns remain highly applicable. These patterns help Salesforce developers tackle common challenges like managing complex business logic, handling data operations efficiently, and creating flexible integrations that can adapt to changing business requirements.
+
+Understanding and applying these patterns in your Apex code will not only improve your code quality but also make your solutions more maintainable and easier for other developers to understand and extend.
+
+### The Three Categories of Design Patterns
+
+The 23 GoF patterns are organized into three distinct categories based on their primary purpose:
+
+**1️⃣ Creational Patterns**
+
+**Purpose**: Deal with object creation mechanisms, trying to create objects in a manner suitable to the situation while hiding the creation logic and making the system independent of how objects are created, composed, and represented.
+
+These patterns are particularly valuable in Salesforce development when you need to control how objects are instantiated, especially when dealing with complex business logic, service classes, or when you want to ensure certain constraints are met during object creation within governor limits.
+
+**Patterns in this category:**
+- Abstract Factory
+- Builder
+- Factory Method
+- Prototype
+- Singleton
+
+**2️⃣ Structural Patterns**
+
+**Purpose**: Deal with object composition and typically identify simple ways to realize relationships between different objects.
+
+In Salesforce development, structural patterns help you compose classes and objects to form larger structures while keeping these structures flexible and efficient. They're especially useful when working with complex data models, integrations, or when you need to adapt existing code to work with new requirements without violating platform constraints.
+
+**Patterns in this category:**
+- Adapter
+- Bridge
+- Composite
+- Decorator
+- Facade
+- Flyweight
+- Proxy
+
+**3️⃣ Behavioral Patterns**
+
+**Purpose**: Focus on communication between objects and the assignment of responsibilities between objects to accomplish specific tasks.
+
+Behavioral patterns are crucial in Salesforce development for managing complex business processes, handling different execution contexts (triggers, batch jobs, queueable jobs), and creating flexible workflows that can adapt to different business scenarios while respecting platform limitations.
+
+**Patterns in this category:**
+- Chain of Responsibility
+- Command
+- Interpreter
+- Iterator
+- Mediator
+- Memento
+- Observer
+- State
+- Strategy
+- Template Method
+- Visitor
+
+### ❓Why Design Patterns Matter in Salesforce Development
+
+Salesforce development presents unique challenges that make design patterns particularly valuable:
+
+**Code Maintainability**
+- **Team Collaboration**: Multiple developers working on the same codebase
+- **Long-term Maintenance**: Code that will be maintained and extended over years
+- **Testing Requirements**: Comprehensive test coverage is essential for deployment
+
+**Business Complexity**
+- **Custom Business Logic**: Complex business requirements need well-structured solutions
+- **Integration Requirements**: Multiple system integrations require flexible architectures
+- **Scalability**: Solutions must scale with growing data volumes and user bases
+  
+**Platform Constraints**
+- **Governor Limits**: Apex has strict execution limits that require efficient code design
+- **Bulkification**: Code must handle multiple records efficiently
+- **Resource Management**: Memory and CPU usage must be carefully managed
+
+### ✅Getting Started with Design Patterns in Apex
+
+When implementing design patterns in Salesforce, consider these key principles:
+
+1. **Understand the Problem First**: Don't implement patterns for the sake of it; identify the specific problem you're trying to solve.
+2. **Consider Salesforce Best Practices**: Ensure your pattern implementation follows Salesforce coding standards and bulkification principles.
+3. **Plan for Governor Limits**: Design your patterns with Salesforce's execution limits in mind.
+4. **Test Thoroughly**: Implement comprehensive test classes that verify both the pattern implementation and business logic.
+5. **Document Your Approach**: Clearly document why you chose specific patterns and how they should be used by other developers.
+
+### 💡Conclusion
+
+The Gang of Four design patterns provide a solid foundation for building robust, maintainable Salesforce applications. By understanding these three categories—Creational, Structural, and Behavioral—you can choose the right pattern for your specific development challenges.
+
+As you progress through learning these patterns, remember that they are tools to solve problems, not solutions looking for problems. The key to successful pattern implementation in Salesforce is understanding both the pattern's intent and how it can be adapted to work effectively within the Salesforce platform's unique constraints and capabilities.
+
+In the following sections, we'll dive deep into specific patterns, providing detailed Apex implementations and real-world Salesforce use cases for each pattern type.
